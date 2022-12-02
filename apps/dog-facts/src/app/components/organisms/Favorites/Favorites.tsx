@@ -4,11 +4,11 @@ import styled from '@emotion/styled';
 
 import FactBox from '../../molecules/FactBox';
 
-import { IFactFavorites, IFact } from '../../../app';
+import { IFactFavorites, IFact } from '../../../types/fact';
 
 interface Props {
   favorites: IFactFavorites;
-  facts: IFact[];
+  facts?: IFact[];
   setFavorite: Dispatch<SetStateAction<IFactFavorites>>;
 }
 
@@ -20,7 +20,7 @@ const Box = styled.div`
   flex-direction: column;
 `;
 
-export const Favorites = ({ favorites, facts, setFavorite }: Props) => {
+export const Favorites = ({ favorites, facts = [], setFavorite }: Props) => {
   const areFavoritesEmpty = Object.keys(favorites).every(
     (key) => !favorites[key].isFavorite
   );

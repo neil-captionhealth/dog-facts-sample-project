@@ -3,7 +3,7 @@ import { useState, Dispatch, SetStateAction } from 'react';
 import FactBox from '../../molecules/FactBox';
 import ControlButton from '../../atomic/ControlButton';
 
-import { IFactFavorites, IFact } from '../../../app';
+import { IFactFavorites, IFact } from '../../../types/fact';
 
 import styled from '@emotion/styled';
 
@@ -15,10 +15,10 @@ const Controls = styled.div`
 
 interface Props {
   setFavorite: Dispatch<SetStateAction<IFactFavorites>>;
-  facts: IFact[];
+  facts?: IFact[];
 }
 
-export const Facts = ({ setFavorite, facts }: Props) => {
+export const Facts = ({ setFavorite, facts = [] }: Props) => {
   const [activeFactId, setActiveFactId] = useState(0);
 
   const handleNextEdge = (nextId: number, edge: number) => {

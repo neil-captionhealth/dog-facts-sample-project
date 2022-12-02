@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import FilledFavoriteStar from './../../../../assets/filled-star.svg';
 import EmptyFavoriteStar from './../../../../assets/empty-star.svg';
 
-import { IFactFavorites } from '../../../app';
+import { IFactFavorites } from '../../../types/fact';
 
 import { Dispatch, SetStateAction } from 'react';
 

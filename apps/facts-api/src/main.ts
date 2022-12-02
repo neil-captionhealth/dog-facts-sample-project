@@ -4,9 +4,15 @@
  */
 
 import * as express from 'express';
-import * as facts from './app/facts'
+import * as cors from 'cors';
+import * as facts from './app/facts';
 
 const app = express();
+
+const corsOptions = {
+  origin: ['http://localhost:4202'],
+};
+app.use(cors(corsOptions));
 
 app.get('/api', (req, res) => {
   res.send({ message: 'Dog Facts API' });

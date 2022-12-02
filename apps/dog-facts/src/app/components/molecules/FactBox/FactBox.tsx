@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import FavoritesButton from '../../atomic/FavoritesButton';
 import { Dispatch, SetStateAction } from 'react';
 
-import { IFactFavorites, IFact } from '../../../app';
+import { IFactFavorites, IFact } from '../../../types/fact';
 interface Props {
   fact: IFact;
   isFavorite: boolean;
@@ -27,7 +27,7 @@ const Box = styled.div<BoxProps>`
 `;
 
 export const FactBox = ({
-  fact: { description, id },
+  fact: { fact: description, id },
   setFavorite,
   isFavorite,
 }: Props) => {
