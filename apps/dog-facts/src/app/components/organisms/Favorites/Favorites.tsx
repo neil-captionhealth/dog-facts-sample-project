@@ -1,17 +1,53 @@
+import { Dispatch, SetStateAction } from 'react';
+
+import styled from '@emotion/styled';
+
 import FactBox from '../../molecules/FactBox';
 
-import { IFactFavorites } from '../../../app';
+import { IFactFavorites, IFact } from '../../../app';
 
 interface Props {
   favorites: IFactFavorites;
+  facts: IFact[];
+  setFavorite: Dispatch<SetStateAction<IFactFavorites>>;
 }
 
-export const Favorites = ({ favorites }: Props) => {
+const Box = styled.div`
+  max-width: 390px;
+  margin-top: 48px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+`;
+
+export const Favorites = ({ favorites, facts, setFavorite }: Props) => {
+  const areFavoritesEmpty = Object.keys(favorites).every(
+    (key) => !favorites[key].isFavorite
+  );
+
   return (
-    <>
-      {/* {favorites.map(({ description }) => (
-        <FactBox description={description} />
-      ))} */}
-    </>
+    <Box>
+      <h1>Favorites</h1>
+      {areFavoritesEmpty && (
+        <p>
+          You don't have any favorites yet!{' '}
+          <span role="img" aria-label="emoji">
+            &#129325;
+          </span>
+        </p>
+      )}
+      {facts.map((fact) => {
+        return (
+          favorites[fact.id]?.isFavorite && (
+            <FactBox
+              key={fact.id}
+              fact={fact}
+              isFavorite
+              setFavorite={setFavorite}
+            />
+          )
+        );
+      })}
+    </Box>
   );
 };
