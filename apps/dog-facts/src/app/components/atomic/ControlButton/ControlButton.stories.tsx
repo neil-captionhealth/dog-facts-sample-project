@@ -1,5 +1,5 @@
 import type { ComponentStory, ComponentMeta } from '@storybook/react';
-import { Component } from './component';
+import { ControlButton as Component } from './ControlButton';
 
 const Story: ComponentMeta<typeof Component> = {
   component: Component,

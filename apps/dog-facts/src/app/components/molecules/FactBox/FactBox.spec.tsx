@@ -1,10 +1,11 @@
 import { render } from '@testing-library/react';
 
-import Component from './component';
+import FactBox from './index';
 
-describe('Component', () => {
+describe('FactBox', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<Component />);
+    const { baseElement } = render(<FactBox />);
+
     expect(baseElement).toBeTruthy();
   });
 });
