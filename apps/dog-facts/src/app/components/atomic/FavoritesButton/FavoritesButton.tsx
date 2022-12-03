@@ -2,14 +2,15 @@ import styled from '@emotion/styled';
 import FilledFavoriteStar from './../../../../assets/filled-star.svg';
 import EmptyFavoriteStar from './../../../../assets/empty-star.svg';
 
-import { IFactFavorites } from '../../../types/fact';
+import { IFactFavorites, IFact } from '../../../types/fact';
 
 import { Dispatch, SetStateAction } from 'react';
 
 interface Props {
   setFavorite: Dispatch<SetStateAction<IFactFavorites>>;
+  fact: IFact;
   isFavorite: boolean;
-  factId: number;
+  fromPage: number;
 }
 
 const Button = styled.button`
@@ -30,15 +31,22 @@ const Icon = styled.img`
   height: 24px;
 `;
 
-export const FavoritesButton = ({ setFavorite, isFavorite, factId }: Props) => {
+export const FavoritesButton = ({
+  setFavorite,
+  isFavorite,
+  fact: { id, fact },
+  fromPage,
+}: Props) => {
   return (
     <Button
       onClick={() =>
         setFavorite((prevState) => {
           return {
             ...prevState,
-            [factId]: {
-              isFavorite: !prevState[factId]?.isFavorite ?? true,
+            [id]: {
+              isFavorite: !prevState[id]?.isFavorite ?? true,
+              description: fact,
+              fromPage,
             },
           };
         })

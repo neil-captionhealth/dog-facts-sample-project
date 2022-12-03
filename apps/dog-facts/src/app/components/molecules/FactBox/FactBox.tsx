@@ -8,6 +8,7 @@ interface Props {
   fact: IFact;
   isFavorite: boolean;
   setFavorite: Dispatch<SetStateAction<IFactFavorites>>;
+  fromPage: number;
 }
 interface BoxProps {
   isFavorite: boolean;
@@ -26,18 +27,15 @@ const Box = styled.div<BoxProps>`
   }
 `;
 
-export const FactBox = ({
-  fact: { fact: description, id },
-  setFavorite,
-  isFavorite,
-}: Props) => {
+export const FactBox = ({ fact, setFavorite, isFavorite, fromPage }: Props) => {
   return (
     <Box isFavorite={isFavorite}>
-      <span>{description}</span>
+      <span>{fact.fact}</span>
       <FavoritesButton
+        fact={fact}
         isFavorite={isFavorite}
         setFavorite={setFavorite}
-        factId={id}
+        fromPage={fromPage}
       />
     </Box>
   );

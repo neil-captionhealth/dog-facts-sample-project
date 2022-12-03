@@ -10,6 +10,7 @@ interface Props {
   favorites: IFactFavorites;
   facts?: IFact[];
   setFavorite: Dispatch<SetStateAction<IFactFavorites>>;
+  fromPage: number;
 }
 
 const Box = styled.div`
@@ -20,7 +21,12 @@ const Box = styled.div`
   flex-direction: column;
 `;
 
-export const Favorites = ({ favorites, facts = [], setFavorite }: Props) => {
+export const Favorites = ({
+  favorites,
+  facts = [],
+  setFavorite,
+  fromPage,
+}: Props) => {
   const areFavoritesEmpty = Object.keys(favorites).every(
     (key) => !favorites[key].isFavorite
   );
@@ -36,16 +42,26 @@ export const Favorites = ({ favorites, facts = [], setFavorite }: Props) => {
           </span>
         </p>
       )}
-      {facts.map((fact) => {
+      {Object.keys(favorites).map((id) => {
+        const description = favorites[id].description;
+        const currentFactAdapter = {
+          id: Number(id),
+          fact: description,
+          length: description.length,
+        };
+
+        if (!favorites[id].isFavorite) {
+          return null;
+        }
+
         return (
-          favorites[fact.id]?.isFavorite && (
-            <FactBox
-              key={fact.id}
-              fact={fact}
-              isFavorite
-              setFavorite={setFavorite}
-            />
-          )
+          <FactBox
+            key={id}
+            fact={currentFactAdapter}
+            isFavorite
+            setFavorite={setFavorite}
+            fromPage={fromPage}
+          />
         );
       })}
     </Box>

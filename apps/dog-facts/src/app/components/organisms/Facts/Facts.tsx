@@ -1,4 +1,4 @@
-import { useState, Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 
 import FactBox from '../../molecules/FactBox';
 import ControlButton from '../../atomic/ControlButton';
@@ -16,27 +16,20 @@ const Controls = styled.div`
 interface Props {
   setFavorite: Dispatch<SetStateAction<IFactFavorites>>;
   facts?: IFact[];
+  openPreviousFact: () => void;
+  openNextFact: () => void;
+  activeFactId: number;
+  fromPage: number;
 }
 
-export const Facts = ({ setFavorite, facts = [] }: Props) => {
-  const [activeFactId, setActiveFactId] = useState(0);
-
-  const handleNextEdge = (nextId: number, edge: number) => {
-    if (facts[nextId]) {
-      setActiveFactId(nextId);
-    } else {
-      setActiveFactId(edge);
-    }
-  };
-
-  const openNextFact = () => {
-    handleNextEdge(activeFactId + 1, 0);
-  };
-
-  const openPreviousFact = () => {
-    handleNextEdge(activeFactId - 1, facts.length - 1);
-  };
-
+export const Facts = ({
+  setFavorite,
+  facts = [],
+  openPreviousFact,
+  openNextFact,
+  activeFactId,
+  fromPage,
+}: Props) => {
   const currentFact = facts[activeFactId];
 
   if (!currentFact) {
@@ -49,6 +42,7 @@ export const Facts = ({ setFavorite, facts = [] }: Props) => {
         fact={currentFact}
         setFavorite={setFavorite}
         isFavorite={false}
+        fromPage={fromPage}
       />
       <Controls>
         <ControlButton title="Previous" handleClick={openPreviousFact} />
