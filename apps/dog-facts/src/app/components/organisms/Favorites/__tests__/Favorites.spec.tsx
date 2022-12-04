@@ -9,7 +9,7 @@ import { favorites } from './mocks';
 
 import Favorites from '../index';
 
-describe('FavoritesButton', () => {
+describe('Favorites', () => {
   const setFavorite: (data: SetStateAction<IFactFavorites>) => void = jest.fn();
 
   beforeEach(() => {

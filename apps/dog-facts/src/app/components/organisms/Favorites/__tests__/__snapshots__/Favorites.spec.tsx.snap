@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FavoritesButton should render successfully 1`] = `
+exports[`Favorites should render successfully 1`] = `
 <DocumentFragment>
   <div
     class="css-ruhqkh-Box e1uxv1rf0"
