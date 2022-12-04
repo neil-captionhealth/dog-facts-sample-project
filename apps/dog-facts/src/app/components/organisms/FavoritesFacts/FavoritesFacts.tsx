@@ -123,10 +123,10 @@ export const FavoritesFacts = () => {
     setPrevious(false);
   };
 
-  const handleFavorite = (data: SetStateAction<IFactFavorites>) => {
+  const handleFavorite = useCallback((data: SetStateAction<IFactFavorites>) => {
     setFavorite(data);
     setFavoriteRemoval(true);
-  };
+  }, []);
 
   useEffect(() => {
     if (nonFavoriteFacts && isPrevious) {
@@ -167,9 +167,9 @@ export const FavoritesFacts = () => {
 
   // update pagesToOmit after favorites removal
   useEffect(() => {
-    console.log('update pagesToOmit');
-
     if (isFavoriteRemoval) {
+      console.log('update pagesToOmit');
+
       setPagesToOmit((pages) =>
         pages.filter((page) =>
           Object.keys(favorites).every((key) => {

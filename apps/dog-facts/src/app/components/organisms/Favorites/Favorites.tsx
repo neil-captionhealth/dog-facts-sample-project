@@ -1,4 +1,4 @@
-import { SetStateAction } from 'react';
+import { SetStateAction, memo } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -19,7 +19,7 @@ const Box = styled.div`
   flex-direction: column;
 `;
 
-export const Favorites = ({ favorites, setFavorite }: Props) => {
+export const Favorites = memo(({ favorites, setFavorite }: Props) => {
   const areFavoritesEmpty = Object.keys(favorites).every(
     (key) => !favorites[key].isFavorite
   );
@@ -58,4 +58,4 @@ export const Favorites = ({ favorites, setFavorite }: Props) => {
       })}
     </Box>
   );
-};
+});
