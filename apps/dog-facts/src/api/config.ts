@@ -7,6 +7,6 @@ export default axios.create({
   },
   params: {
     max_length: 140,
-    limit: 5, // TODO 25
+    limit: 25, // to test the transition between pages you can use 5
   },
 });
