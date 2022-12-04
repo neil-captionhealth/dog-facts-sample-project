@@ -17,7 +17,7 @@ import { fetchFacts } from './../../../../api/endpoints';
 
 import { queryClient } from '../../../app';
 
-const PREFETCH_DISTANCE = 2;
+const PREFETCH_DISTANCE = 1;
 
 export const FavoritesFacts = () => {
   const [favorites, setFavorite] = useState<IFactFavorites>({});
@@ -41,13 +41,12 @@ export const FavoritesFacts = () => {
     [facts, favorites]
   );
 
-  // TODO
-  const prefetchFacts = useCallback(async () => {
+  const prefetchFacts = useCallback(async (page: number) => {
     await queryClient.prefetchQuery({
-      queryKey: ['getFacts', activeFactId],
-      queryFn: () => fetchFacts(page + 1),
+      queryKey: ['getFacts'],
+      queryFn: () => fetchFacts(page),
     });
-  }, [activeFactId, page]);
+  }, []);
 
   const goToPrevPage = () => {
     let previousPage = page - 1;
@@ -92,7 +91,6 @@ export const FavoritesFacts = () => {
     const previousFact = activeFactId - 1;
 
     if (previousFact < 0 && nonFavoriteFacts) {
-      console.log('set page?');
       if (data && page - 1 < 1) {
         startTransition(() => {
           setPage(data.last_page);
@@ -187,6 +185,24 @@ export const FavoritesFacts = () => {
     }
     setFavoriteRemoval(false);
   }, [favorites, isFavoriteRemoval]);
+
+  //prefetch the next page in cache near the edge of the data set.
+  useEffect(() => {
+    if (data) {
+      if (
+        activeFactId + PREFETCH_DISTANCE === nonFavoriteFacts?.length &&
+        !isPrevious
+      ) {
+        const nextPage = page + 1 > data.last_page ? 1 : page + 1;
+
+        prefetchFacts(nextPage);
+      } else if (activeFactId === 0 && isPrevious) {
+        const prevPage = page - 1 < 1 ? data.last_page : page - 1;
+
+        prefetchFacts(prevPage);
+      }
+    }
+  }, [activeFactId, prefetchFacts, page, data, nonFavoriteFacts, isPrevious]);
 
   if (isLoading || isPending) return <span>Loading...</span>;
   if (error) return <span>Oops! An error has occurred. Don't worry!.</span>;
