@@ -7,8 +7,10 @@ import { IFactFavorites, IFact } from '../../../types/fact';
 interface Props {
   fact: IFact;
   isFavorite: boolean;
-  setFavorite: Dispatch<SetStateAction<IFactFavorites>>;
-  fromPage: number;
+  setFavorite:
+    | Dispatch<SetStateAction<IFactFavorites>>
+    | ((data: SetStateAction<IFactFavorites>) => void);
+  fromPage?: number;
 }
 interface BoxProps {
   isFavorite: boolean;

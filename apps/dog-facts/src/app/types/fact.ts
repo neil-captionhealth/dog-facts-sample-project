@@ -2,7 +2,7 @@ export interface IFactFavorites {
   [id: number | string]: {
     description: string;
     isFavorite: boolean;
-    fromPage: number;
+    fromPage?: number;
   };
 }
 export interface IFact {

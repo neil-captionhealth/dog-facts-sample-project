@@ -7,6 +7,6 @@ export default axios.create({
   },
   params: {
     max_length: 140,
-    limit: 3, // TODO 25
+    limit: 5, // TODO 25
   },
 });

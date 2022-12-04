@@ -7,10 +7,12 @@ import { IFactFavorites, IFact } from '../../../types/fact';
 import { Dispatch, SetStateAction } from 'react';
 
 interface Props {
-  setFavorite: Dispatch<SetStateAction<IFactFavorites>>;
+  setFavorite:
+    | Dispatch<SetStateAction<IFactFavorites>>
+    | ((data: SetStateAction<IFactFavorites>) => void);
   fact: IFact;
   isFavorite: boolean;
-  fromPage: number;
+  fromPage?: number;
 }
 
 const Button = styled.button`
@@ -46,7 +48,7 @@ export const FavoritesButton = ({
             [id]: {
               isFavorite: !prevState[id]?.isFavorite ?? true,
               description: fact,
-              fromPage,
+              fromPage: prevState[id]?.fromPage || fromPage,
             },
           };
         })

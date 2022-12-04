@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import { SetStateAction } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -9,8 +9,7 @@ import { IFactFavorites, IFact } from '../../../types/fact';
 interface Props {
   favorites: IFactFavorites;
   facts?: IFact[];
-  setFavorite: Dispatch<SetStateAction<IFactFavorites>>;
-  fromPage: number;
+  setFavorite: (data: SetStateAction<IFactFavorites>) => void;
 }
 
 const Box = styled.div`
@@ -21,12 +20,7 @@ const Box = styled.div`
   flex-direction: column;
 `;
 
-export const Favorites = ({
-  favorites,
-  facts = [],
-  setFavorite,
-  fromPage,
-}: Props) => {
+export const Favorites = ({ favorites, setFavorite }: Props) => {
   const areFavoritesEmpty = Object.keys(favorites).every(
     (key) => !favorites[key].isFavorite
   );
@@ -60,7 +54,6 @@ export const Favorites = ({
             fact={currentFactAdapter}
             isFavorite
             setFavorite={setFavorite}
-            fromPage={fromPage}
           />
         );
       })}

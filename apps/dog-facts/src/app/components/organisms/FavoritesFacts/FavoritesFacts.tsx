@@ -1,4 +1,11 @@
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import {
+  useState,
+  useMemo,
+  useEffect,
+  useCallback,
+  useTransition,
+  SetStateAction,
+} from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 import Header from '../../atomic/Header';
@@ -18,6 +25,8 @@ export const FavoritesFacts = () => {
   const [page, setPage] = useState(1);
   const [isPrevious, setPrevious] = useState(false);
   const [pagesToOmit, setPagesToOmit] = useState<number[]>([]);
+  const [isFavoriteRemoval, setFavoriteRemoval] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const { isLoading, error, data } = useQuery({
     queryKey: ['getFacts', page],
@@ -40,10 +49,11 @@ export const FavoritesFacts = () => {
     });
   }, [activeFactId, page]);
 
-  const findPrevPage = () => {
+  const goToPrevPage = () => {
     let previousPage = page - 1;
 
     while ((pagesToOmit.includes(previousPage) || previousPage === 0) && data) {
+      console.log('find a prev page');
       if (previousPage === 0) {
         previousPage = data?.last_page;
       } else {
@@ -52,17 +62,20 @@ export const FavoritesFacts = () => {
     }
 
     console.log(previousPage, 'previousPage final');
-    setPage(previousPage);
+    startTransition(() => {
+      setPage(previousPage);
+    });
   };
 
-  const findNextPage = () => {
+  const goToNextPage = () => {
     let nextPage = page + 1;
 
     while (
-      (pagesToOmit.includes(nextPage) || nextPage === data?.last_page) &&
-      data
+      pagesToOmit.includes(nextPage) ||
+      (data && nextPage > data.last_page)
     ) {
-      if (nextPage === data.last_page) {
+      console.log('find a next page');
+      if (data && nextPage > data.last_page) {
         nextPage = 1;
       } else {
         nextPage++;
@@ -70,7 +83,9 @@ export const FavoritesFacts = () => {
     }
 
     console.log(nextPage, 'nextPage final');
-    setPage(nextPage);
+    startTransition(() => {
+      setPage(nextPage);
+    });
   };
 
   const openPreviousFact = () => {
@@ -79,9 +94,11 @@ export const FavoritesFacts = () => {
     if (previousFact < 0 && nonFavoriteFacts) {
       console.log('set page?');
       if (data && page - 1 < 1) {
-        setPage(data.last_page);
+        startTransition(() => {
+          setPage(data.last_page);
+        });
       } else {
-        findPrevPage();
+        goToPrevPage();
       }
     } else {
       setActiveFactId(previousFact);
@@ -94,20 +111,26 @@ export const FavoritesFacts = () => {
 
     if (nonFavoriteFacts && nextFact === nonFavoriteFacts?.length) {
       if (data && page + 1 > data.last_page) {
-        setPage(1);
+        startTransition(() => {
+          setPage(1);
+        });
       } else {
-        findNextPage();
+        goToNextPage();
       }
       setActiveFactId(0);
     } else {
       setActiveFactId(nextFact);
     }
+
+    setPrevious(false);
+  };
+
+  const handleFavorite = (data: SetStateAction<IFactFavorites>) => {
+    setFavorite(data);
+    setFavoriteRemoval(true);
   };
 
   useEffect(() => {
-    console.log('update fact on the last page');
-    console.log(isPrevious, 'isPrevious');
-
     if (nonFavoriteFacts && isPrevious) {
       setActiveFactId(nonFavoriteFacts.length - 1);
     }
@@ -115,41 +138,57 @@ export const FavoritesFacts = () => {
 
   // load a new page once dataset is empty or once we reached a last fact
   useEffect(() => {
-    console.log(nonFavoriteFacts?.length, 'nonFavoriteFacts.length');
     if (
       nonFavoriteFacts &&
       (!nonFavoriteFacts.length || nonFavoriteFacts.length === activeFactId)
     ) {
-      if (!nonFavoriteFacts.length && !pagesToOmit.includes(page)) {
-        setPagesToOmit((pages) => pages.concat(page));
-      }
       console.log('load a new page once dataset is empty.');
-      setPage((page) => page + 1);
+      goToNextPage();
       setActiveFactId(0);
     }
   }, [nonFavoriteFacts, activeFactId]);
 
-  //reset isPrevious case
+  //update pagesToOmit on a new page
   useEffect(() => {
-    setPrevious(false);
-  }, [nonFavoriteFacts]);
+    if (
+      nonFavoriteFacts &&
+      !nonFavoriteFacts.length &&
+      data &&
+      page === data?.current_page
+    ) {
+      console.log('add a page to omit');
 
-  // update pagesToOmit on favorites event
+      setPagesToOmit((pages) => {
+        if (!pages.includes(page)) {
+          return pages.concat(page);
+        }
+        return pages;
+      });
+    }
+  }, [page, nonFavoriteFacts, data]);
+
+  // update pagesToOmit after favorites removal
   useEffect(() => {
     console.log('update pagesToOmit');
 
-    setPagesToOmit((pages) =>
-      pages.filter((page) =>
-        Object.keys(favorites).every((key) => {
-          const favorite = favorites[key];
+    if (isFavoriteRemoval) {
+      setPagesToOmit((pages) =>
+        pages.filter((page) =>
+          Object.keys(favorites).every((key) => {
+            const favorite = favorites[key];
 
-          return favorite.isFavorite && favorites[key].fromPage === page;
-        })
-      )
-    );
-  }, [favorites]);
+            if (favorites[key].fromPage !== page) {
+              return true;
+            }
+            return favorite.isFavorite;
+          })
+        )
+      );
+    }
+    setFavoriteRemoval(false);
+  }, [favorites, isFavoriteRemoval]);
 
-  if (isLoading) return <span>Loading...</span>;
+  if (isLoading || isPending) return <span>Loading...</span>;
   if (error) return <span>Oops! An error has occurred. Don't worry!.</span>;
 
   return (
@@ -165,9 +204,8 @@ export const FavoritesFacts = () => {
       />
       <Favorites
         favorites={favorites}
-        setFavorite={setFavorite}
+        setFavorite={handleFavorite}
         facts={facts}
-        fromPage={page}
       />
     </>
   );
