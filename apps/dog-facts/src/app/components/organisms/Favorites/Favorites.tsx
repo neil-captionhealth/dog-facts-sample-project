@@ -4,11 +4,10 @@ import styled from '@emotion/styled';
 
 import FactBox from '../../molecules/FactBox';
 
-import { IFactFavorites, IFact } from '../../../types/fact';
+import { IFactFavorites } from '../../../types/fact';
 
 interface Props {
   favorites: IFactFavorites;
-  facts?: IFact[];
   setFavorite: (data: SetStateAction<IFactFavorites>) => void;
 }
 
@@ -29,7 +28,7 @@ export const Favorites = ({ favorites, setFavorite }: Props) => {
     <Box>
       <h1>Favorites</h1>
       {areFavoritesEmpty && (
-        <p>
+        <p data-testid="favoritesEmptyLabel">
           You don't have any favorites yet!{' '}
           <span role="img" aria-label="emoji">
             &#129325;

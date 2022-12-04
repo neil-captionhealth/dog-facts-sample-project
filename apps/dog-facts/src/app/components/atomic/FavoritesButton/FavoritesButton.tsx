@@ -41,6 +41,7 @@ export const FavoritesButton = ({
 }: Props) => {
   return (
     <Button
+      data-testid="handleFavoriteButton"
       onClick={() =>
         setFavorite((prevState) => {
           return {
@@ -57,6 +58,7 @@ export const FavoritesButton = ({
       <Icon
         src={isFavorite ? FilledFavoriteStar : EmptyFavoriteStar}
         alt="star icon"
+        data-testid="favoriteIcon"
       />
       <span>{`${isFavorite ? 'Remove from' : 'Add to'} Favorites`}</span>
     </Button>

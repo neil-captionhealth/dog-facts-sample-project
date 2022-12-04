@@ -218,11 +218,7 @@ export const FavoritesFacts = () => {
         activeFactId={activeFactId}
         fromPage={page}
       />
-      <Favorites
-        favorites={favorites}
-        setFavorite={handleFavorite}
-        facts={facts}
-      />
+      <Favorites favorites={favorites} setFavorite={handleFavorite} />
     </>
   );
 };
