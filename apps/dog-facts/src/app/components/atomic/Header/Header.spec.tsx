@@ -1,10 +1,11 @@
 import { render } from '@testing-library/react';
 
-import Component from './component';
+import Header from './index';
 
-describe('Component', () => {
+describe('Header', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<Component />);
+    const { baseElement } = render(<Header title="Dog facts" />);
+
     expect(baseElement).toBeTruthy();
   });
 });

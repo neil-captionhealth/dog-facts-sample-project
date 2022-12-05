@@ -16,10 +16,7 @@
         "main": "apps/dog-facts/src/main.tsx",
         "polyfills": "apps/dog-facts/src/polyfills.ts",
         "tsConfig": "apps/dog-facts/tsconfig.app.json",
-        "assets": [
-          "apps/dog-facts/src/favicon.ico",
-          "apps/dog-facts/src/assets"
-        ],
+        "assets": ["apps/dog-facts/src/assets"],
         "styles": [],
         "scripts": [],
         "webpackConfig": "@nrwl/react/plugins/webpack"

@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Favorites should render successfully 1`] = `
+<DocumentFragment>
+  <div
+    class="css-ruhqkh-Box e1uxv1rf0"
+  >
+    <h1>
+      Favorites
+    </h1>
+    <div
+      class="css-wfh3qg-Box ergcqvm0"
+    >
+      <span>
+        All dogs can be traced back 40 million years ago to a weasel-like animal called the Miacis which dwelled in trees and dens. The Miacis later evolved into the Tomarctus, a direct forbear of the genus Canis, which includes the wolf and jackal as well as the dog.
+      </span>
+      <button
+        class="css-1m826vc-Button e165mwdw1"
+        data-testid="handleFavoriteButton"
+      >
+        <img
+          alt="star icon"
+          class="css-ef7ogu-Icon e165mwdw0"
+          data-testid="favoriteIcon"
+          src="filled-star.svg"
+        />
+        <span>
+          Remove from Favorites
+        </span>
+      </button>
+    </div>
+    <div
+      class="css-wfh3qg-Box ergcqvm0"
+    >
+      <span>
+        In 2003, Dr. Roger Mugford invented the "wagometer", a device that claims to interpret a dog's exact mood by measuring the wag of its tail.
+      </span>
+      <button
+        class="css-1m826vc-Button e165mwdw1"
+        data-testid="handleFavoriteButton"
+      >
+        <img
+          alt="star icon"
+          class="css-ef7ogu-Icon e165mwdw0"
+          data-testid="favoriteIcon"
+          src="filled-star.svg"
+        />
+        <span>
+          Remove from Favorites
+        </span>
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;
